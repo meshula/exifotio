@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Python",
+            "type": "python",
+            "pythonPath":"${config:python.pythonPath}",
+            "request": "launch",
+            "stopOnEntry": true,
+            "console": "none",
+            "program": "${file}",
+            "cwd": "${workspaceRoot}",
+            "debugOptions": [
+                "WaitOnAbnormalExit",
+                "WaitOnNormalExit",
+                "RedirectOutput"
+            ],
+            "env": {"name":"value"},
+            "args": ["C:/Users/Nick Porcino/Pictures/ingest/2017/2017-08-21", "c:/projects/foo.otio"],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceRoot}"
+        }
+    ]
+}
