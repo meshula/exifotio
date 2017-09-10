@@ -6,7 +6,7 @@ The time of the first image is recorded as the epoch for the track, as a julian 
 
 Each image is treated as a media source whose duration is the shutter time.
 
-THe images are concatenated as clips on the track, sequentially, and save as an OTIO file.
+The images are concatenated as clips on the track, sequentially, and saved as an OTIO file.
 
 To use exifotio, you will need to have already installed the exifread package, and OpenTimelineIO.
 
