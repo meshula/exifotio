@@ -37,15 +37,10 @@ def main(srcpath, outfile):
     srcpath = '/'.join(srcpath.split('\\'))
     candidate_files = []
 
-    bail = 0
-
     for (dirpath, dirnames, filenames) in walk(srcpath):
         for file in filenames:
             fullpath = os.path.join(dirpath, file)
             candidate_files.append('/'.join(fullpath.split('\\')))
-            bail += 1
-            if (bail > 10):
-                break # hack only ingest one file
         break # only ingest the first directory found. TODO: make a track per directory
 
     refs = []
