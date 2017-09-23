@@ -6,12 +6,13 @@ import os
 import math
 import sys
 import logging
-import exifread
 import datetime
-import jdutil
 import collections
 
+import jdutil
+import exifread
 import opentimelineio as otio
+from opentimelineio import opentime
 
 
 logging.basicConfig(level=logging.INFO)
@@ -37,6 +38,8 @@ def main(srcpath, outfile):
     srcpath = '/'.join(srcpath.split('\\'))
     candidate_files = []
 
+    print "Scanning directory: ", srcpath
+
     for (dirpath, dirnames, filenames) in walk(srcpath):
         for file in filenames:
             fullpath = os.path.join(dirpath, file)
@@ -44,6 +47,11 @@ def main(srcpath, outfile):
         break # only ingest the first directory found. TODO: make a track per directory
 
     refs = []
+
+    print "Reading EXIF data"
+
+    file_count = 0
+    max_files = 1000
 
     for path in candidate_files:
         fh = open(path, "rb")
@@ -71,6 +79,10 @@ def main(srcpath, outfile):
 
             refs.append(ref)
 
+        file_count += 1
+        if file_count > max_files:
+            break
+
     refs.sort()
 
     epoch = refs[0].time_stamp
@@ -92,9 +104,9 @@ def main(srcpath, outfile):
         duration = ts_next - ts
 
         # exposure time is already in seconds
-        image_time = otio.opentime.TimeRange(
-            otio.opentime.RationalTime(ts, 1),
-            otio.opentime.RationalTime(ref.exposure_time, 1.0))
+        image_time = opentime.TimeRange(
+            opentime.RationalTime(ts, 1),
+            opentime.RationalTime(ref.exposure_time, 1.0))
 
         media_reference = otio.media_reference.External(
             target_url="file://" + ref.path,
@@ -103,7 +115,7 @@ def main(srcpath, outfile):
 
         clip = otio.schema.Clip(name=ref.name)
         clip.media_reference = media_reference
-        clip.source_range = otio.opentime.TimeRange(image_time.start_time, otio.opentime.RationalTime(duration, 1.0))
+        clip.source_range = opentime.TimeRange(opentime.RationalTime(0, 1.0), opentime.RationalTime(duration, 1.0))
         track.append(clip)
 
     otio.adapters.write_to_file(timeline, outfile)
