@@ -97,6 +97,8 @@ def main(srcpath, outfile):
     track.metadata = { "epoch": epoch }
     timeline.tracks.append(track)
 
+    # available_range is nil, and source_range is duration, per
+    # https://academysoftwarefdn.slack.com/archives/CMQ9J4BQC/p1660163305802149
     for i, ref in enumerate(refs):
         next_i = min(i+1, len(refs)-1)
         ts = (ref.time_stamp - epoch) * 24.0 * 3600.0 # seconds
@@ -110,7 +112,7 @@ def main(srcpath, outfile):
 
         media_reference = otio.media_reference.External(
             target_url="file://" + ref.path,
-            available_range = image_time)
+            available_range = nil)
         media_reference.name = ref.name
 
         clip = otio.schema.Clip(name=ref.name)
